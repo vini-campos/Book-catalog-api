@@ -4,8 +4,11 @@ import br.com.vini.library.database.models.CustomersEntity;
 import br.com.vini.library.database.repositories.ICustomersRepository;
 import br.com.vini.library.dtos.CustomersDto;
 import br.com.vini.library.exceptions.BadRequestException;
+import br.com.vini.library.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,5 +27,16 @@ public class CustomersService {
                 .build();
 
         customersRepository.save(customer);
+    }
+
+    public CustomersDto getById(Integer id) {
+        CustomersEntity customer = customersRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Customer not found"));
+
+        return CustomersDto.builder()
+                .name(customer.getName())
+                .email(customer.getEmail())
+                .birthDate(customer.getBirthDate())
+                .build();
     }
 }
