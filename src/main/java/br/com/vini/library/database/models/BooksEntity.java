@@ -17,6 +17,9 @@ public class BooksEntity {
     private Integer id;
 
     @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
     private String description;
 
     @Enumerated(EnumType.STRING)
@@ -25,4 +28,8 @@ public class BooksEntity {
 
     @Column(nullable = false, name = "is_borrowed")
     private boolean isBorrowed;
+
+    @ManyToOne
+    @JoinColumn(name = "authors_id")
+    private AuthorsEntity author;
 }
