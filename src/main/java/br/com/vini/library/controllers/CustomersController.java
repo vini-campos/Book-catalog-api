@@ -19,7 +19,6 @@ import java.util.List;
 public class CustomersController {
     private final CustomersService customersService;
 
-    @PostMapping
     @GetMapping("/findAll")
     public ResponseEntity<List<CustomersDto>> getAll() {
         return ResponseEntity.ok(customersService.getAll());
@@ -36,9 +35,10 @@ public class CustomersController {
         customersService.registerCustomer(customersDto);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<CustomersDto> getById(@PathVariable("id") Integer id) {
-        return ResponseEntity.ok(customersService.getById(id));
+    @PutMapping("/update/{id}")
+    public ResponseEntity<CustomersDto> updateCustomer(@Valid @PathVariable("id") Integer id, @RequestBody CustomersDto dto) {
+        return ResponseEntity.ok(customersService.update(id, dto));
+    }
 
     @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
