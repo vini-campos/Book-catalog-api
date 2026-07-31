@@ -9,11 +9,35 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CustomersService {
     private final ICustomersRepository customersRepository;
+
+    public List<CustomersDto> getAll() throws NotFoundException {
+        List<CustomersEntity> customers = customersRepository.findAll();
+
+        if (customers.isEmpty()) {
+            throw new NotFoundException("there are no customers on the system");
+        }
+
+        return customers.stream()
+                .map(CustomersDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    public CustomersDto getById(Integer id) {
+        CustomersEntity customer = customersRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Customer not found"));
+
+        return CustomersDto.builder()
+                .name(customer.getName())
+                .email(customer.getEmail())
+                .birthDate(customer.getBirthDate())
+                .build();
+    }
 
     public void registerCustomer(CustomersDto customersDto) throws BadRequestException {
         if (customersRepository.existsByEmail(customersDto.getEmail())) {
