@@ -29,14 +29,21 @@ public class CustomersService {
         customersRepository.save(customer);
     }
 
-    public CustomersDto getById(Integer id) {
+    public CustomersDto update(Integer id, CustomersDto customersDto) throws NotFoundException {
         CustomersEntity customer = customersRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Customer not found"));
 
-        return CustomersDto.builder()
-                .name(customer.getName())
-                .email(customer.getEmail())
-                .birthDate(customer.getBirthDate())
-                .build();
+        customer.setName(customersDto.getName());
+        customer.setEmail(customersDto.getEmail());
+        customer.setBirthDate(customersDto.getBirthDate());
+
+        return CustomersDto.fromEntity(customersRepository.save(customer));
+    }
+
+    public void deleteCustomer(Integer id) throws NotFoundException {
+        CustomersEntity customer = customersRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Customer not found"));
+
+        customersRepository.deleteById(id);
     }
 }
