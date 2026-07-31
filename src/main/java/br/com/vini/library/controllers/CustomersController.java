@@ -1,6 +1,5 @@
 package br.com.vini.library.controllers;
 
-import br.com.vini.library.dtos.BooksDto;
 import br.com.vini.library.dtos.CustomersDto;
 import br.com.vini.library.exceptions.BadRequestException;
 import br.com.vini.library.services.CustomersService;
@@ -11,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @Validated
@@ -19,6 +20,17 @@ public class CustomersController {
     private final CustomersService customersService;
 
     @PostMapping
+    @GetMapping("/findAll")
+    public ResponseEntity<List<CustomersDto>> getAll() {
+        return ResponseEntity.ok(customersService.getAll());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CustomersDto> getById(@PathVariable("id") Integer id) {
+        return ResponseEntity.ok(customersService.getById(id));
+    }
+
+    @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
     public void registerCustomer(@Valid @RequestBody CustomersDto customersDto) throws BadRequestException {
         customersService.registerCustomer(customersDto);
@@ -27,5 +39,10 @@ public class CustomersController {
     @GetMapping("/{id}")
     public ResponseEntity<CustomersDto> getById(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(customersService.getById(id));
+
+    @DeleteMapping("/delete/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCustomerById(@Valid @PathVariable("id") Integer id) {
+        customersService.deleteCustomer(id);
     }
 }
