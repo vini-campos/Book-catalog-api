@@ -1,6 +1,5 @@
-package br.com.vini.library.dtos;
+package br.com.vini.library.dtos.requests;
 
-import br.com.vini.library.database.models.CustomersEntity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -22,12 +21,4 @@ public class CustomersDto {
 
     @NotNull
     private LocalDate birthDate;
-
-    public static CustomersDto fromEntity(CustomersEntity entity) {
-        return CustomersDto.builder()
-                .name(entity.getName())
-                .email(entity.getEmail())
-                .birthDate(entity.getBirthDate())
-                .build();
-    }
 }
