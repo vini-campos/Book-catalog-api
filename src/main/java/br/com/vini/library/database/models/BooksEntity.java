@@ -22,6 +22,9 @@ public class BooksEntity {
     @Column(nullable = false)
     private String description;
 
+    @Column(unique = true, nullable = false)
+    private String isbn;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, name = "age_group")
     private AgeGroupEnum ageGroup;
