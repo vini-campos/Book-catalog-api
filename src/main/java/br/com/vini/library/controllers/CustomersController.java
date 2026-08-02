@@ -1,48 +1,46 @@
 package br.com.vini.library.controllers;
 
-import br.com.vini.library.dtos.CustomersDto;
-import br.com.vini.library.exceptions.BadRequestException;
+import br.com.vini.library.dtos.requests.CustomersDto;
+import br.com.vini.library.dtos.responses.CustomersResponse;
 import br.com.vini.library.services.CustomersService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@Validated
 @RequestMapping("/v1/customers")
 public class CustomersController {
     private final CustomersService customersService;
 
-    @GetMapping("/findAll")
-    public ResponseEntity<List<CustomersDto>> getAll() {
+    @GetMapping
+    public ResponseEntity<List<CustomersResponse>> getAll() {
         return ResponseEntity.ok(customersService.getAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CustomersDto> getById(@PathVariable("id") Integer id) {
+    public ResponseEntity<CustomersResponse> getById(@PathVariable Integer id) {
         return ResponseEntity.ok(customersService.getById(id));
     }
 
-    @PostMapping("/create")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerCustomer(@Valid @RequestBody CustomersDto customersDto) throws BadRequestException {
+    public void registerCustomer(@Valid @RequestBody CustomersDto customersDto) {
         customersService.registerCustomer(customersDto);
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<CustomersDto> updateCustomer(@Valid @PathVariable("id") Integer id, @RequestBody CustomersDto dto) {
-        return ResponseEntity.ok(customersService.update(id, dto));
+    @PutMapping("/{id}")
+    public ResponseEntity<CustomersResponse> updateCustomer(@PathVariable Integer id, @Valid @RequestBody CustomersDto customersDto) {
+        return ResponseEntity.ok(customersService.update(id, customersDto));
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCustomerById(@Valid @PathVariable("id") Integer id) {
+    public void deleteCustomer(@PathVariable Integer id) {
         customersService.deleteCustomer(id);
     }
 }
