@@ -20,7 +20,7 @@ public class BooksService {
     private final IBooksRepository booksRepository;
     private final IAuthorsRepository authorsRepository;
 
-    public List<BooksResponse> getAll() {
+    public List<BooksResponse> getAll() throws NotFoundException {
         List<BooksEntity> books = booksRepository.findAll();
 
         if (books.isEmpty()) {
@@ -32,7 +32,7 @@ public class BooksService {
                 .collect(Collectors.toList());
     }
 
-    public BooksResponse getById(Integer id) {
+    public BooksResponse getById(Integer id) throws NotFoundException {
         BooksEntity book = booksRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Book not found"));
 
@@ -77,7 +77,16 @@ public class BooksService {
         return BooksResponse.fromEntity(booksRepository.save(book));
     }
 
-    public void deleteBook(String isbn) {
+    public BooksResponse updateBorrowStatus(String isbn, BooksDto dto) throws NotFoundException {
+        BooksEntity book = booksRepository.findByIsbn(isbn)
+                .orElseThrow(() -> new NotFoundException("Book not found to update"));
+
+        book.setBorrowed(dto.getIsBorrowed());
+
+        return BooksResponse.fromEntity(booksRepository.save(book));
+    }
+
+    public void deleteBook(String isbn) throws NotFoundException {
         if (booksRepository.findByIsbn(isbn).isEmpty()) {
             throw new NotFoundException("Book not found to delete");
         }
