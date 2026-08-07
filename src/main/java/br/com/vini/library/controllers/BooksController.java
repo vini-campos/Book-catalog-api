@@ -42,7 +42,7 @@ public class BooksController {
 
     @DeleteMapping("/{isbn}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteBook(String isbn) {
+    public void deleteBook(@PathVariable("isbn") String isbn) {
         booksService.deleteBook(isbn);
     }
 }
