@@ -40,6 +40,11 @@ public class BooksController {
         return ResponseEntity.ok(booksService.update(isbn, booksDto));
     }
 
+    @PutMapping("/borrow/{isbn}")
+    public ResponseEntity<BooksResponse> updateBorrowStatus(@Valid @PathVariable("isbn") String isbn, @RequestBody BooksDto booksDto) {
+        return ResponseEntity.ok(booksService.updateBorrowStatus(isbn, booksDto));
+    }
+
     @DeleteMapping("/{isbn}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteBook(@PathVariable("isbn") String isbn) {
