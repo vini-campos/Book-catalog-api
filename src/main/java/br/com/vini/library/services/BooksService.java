@@ -2,8 +2,10 @@ package br.com.vini.library.services;
 
 import br.com.vini.library.database.models.AuthorsEntity;
 import br.com.vini.library.database.models.BooksEntity;
+import br.com.vini.library.database.models.CustomersEntity;
 import br.com.vini.library.database.repositories.IAuthorsRepository;
 import br.com.vini.library.database.repositories.IBooksRepository;
+import br.com.vini.library.database.repositories.ICustomersRepository;
 import br.com.vini.library.dtos.requests.BooksDto;
 import br.com.vini.library.dtos.responses.BooksResponse;
 import br.com.vini.library.exceptions.BadRequestException;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 public class BooksService {
     private final IBooksRepository booksRepository;
     private final IAuthorsRepository authorsRepository;
+    private final ICustomersRepository customersRepository;
 
     public List<BooksResponse> getAll() throws NotFoundException {
         List<BooksEntity> books = booksRepository.findAll();
@@ -52,7 +55,7 @@ public class BooksService {
                 .description(dto.getDescription())
                 .isbn(dto.getIsbn())
                 .ageGroup(dto.getAgeGroup())
-                .isBorrowed(dto.getIsBorrowed())
+                .borrowed(dto.getIsBorrowed())
                 .author(author)
                 .build();
 
@@ -77,13 +80,46 @@ public class BooksService {
         return BooksResponse.fromEntity(booksRepository.save(book));
     }
 
-    public BooksResponse updateBorrowStatus(String isbn, BooksDto dto) throws NotFoundException {
+    public BooksResponse borrowBook(Integer customerId, String isbn) throws NotFoundException {
+        CustomersEntity customer = customersRepository.findById(customerId)
+                .orElseThrow(() -> new NotFoundException("customer not found"));
+
+        boolean alreadyHasBook = customer.getBooksBorrowed() != null
+                && !customer.getBooksBorrowed().isEmpty();
+
+        if (alreadyHasBook) throw new BadRequestException("Customer already has a borrowed book");
+
         BooksEntity book = booksRepository.findByIsbn(isbn)
-                .orElseThrow(() -> new NotFoundException("Book not found to update"));
+                .orElseThrow(() -> new NotFoundException("Book not found"));
 
-        book.setBorrowed(dto.getIsBorrowed());
+        if (book.isBorrowed()) throw new BadRequestException("Book is already borrowed");
 
-        return BooksResponse.fromEntity(booksRepository.save(book));
+        book.setBorrowed(true);
+        book.setCurrentOwner(customer);
+        booksRepository.save(book);
+
+        return BooksResponse.fromEntity(book);
+    }
+
+    public BooksResponse returnBook(Integer customerId, String isbn) throws NotFoundException {
+        CustomersEntity customer = customersRepository.findById(customerId)
+                .orElseThrow(() -> new NotFoundException("Customer not found"));
+
+        boolean hasNoBook = customer.getBooksBorrowed() == null
+                || customer.getBooksBorrowed().isEmpty();
+
+        if (hasNoBook) throw new BadRequestException("Customer has no book borrowed");
+
+        BooksEntity book = booksRepository.findByIsbn(isbn)
+                .orElseThrow(() -> new NotFoundException("Book not found"));
+
+        if (!book.isBorrowed()) throw new BadRequestException("Book is not borrowed");
+
+        book.setBorrowed(false);
+        book.setCurrentOwner(null);
+        booksRepository.save(book);
+
+        return BooksResponse.fromEntity(book);
     }
 
     public void deleteBook(String isbn) throws NotFoundException {
