@@ -30,7 +30,11 @@ public class BooksEntity {
     private AgeGroupEnum ageGroup;
 
     @Column(nullable = false, name = "is_borrowed")
-    private boolean isBorrowed;
+    private boolean borrowed;
+
+    @ManyToOne
+    @JoinColumn(name = "current_owner_id")
+    private CustomersEntity currentOwner;
 
     @ManyToOne
     @JoinColumn(name = "authors_id")
