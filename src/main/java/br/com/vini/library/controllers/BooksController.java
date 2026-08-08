@@ -40,9 +40,14 @@ public class BooksController {
         return ResponseEntity.ok(booksService.update(isbn, booksDto));
     }
 
-    @PutMapping("/borrow/{isbn}")
-    public ResponseEntity<BooksResponse> updateBorrowStatus(@Valid @PathVariable("isbn") String isbn, @RequestBody BooksDto booksDto) {
-        return ResponseEntity.ok(booksService.updateBorrowStatus(isbn, booksDto));
+    @PatchMapping("/{id}/borrow/{isbn}")
+    public ResponseEntity<BooksResponse> borrowBook(@Valid @PathVariable("id") Integer id, @PathVariable String isbn) {
+        return ResponseEntity.ok(booksService.borrowBook(id, isbn));
+    }
+
+    @PatchMapping("/{id}/return/{isbn}")
+    public ResponseEntity<BooksResponse> returnBook(@Valid @PathVariable("id") Integer id, @PathVariable("isbn") String isbn) {
+        return ResponseEntity.ok(booksService.returnBook(id, isbn));
     }
 
     @DeleteMapping("/{isbn}")
