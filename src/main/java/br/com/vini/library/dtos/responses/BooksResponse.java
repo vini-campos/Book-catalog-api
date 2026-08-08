@@ -17,8 +17,9 @@ public class BooksResponse {
     private String description;
     private String isbn;
     private AgeGroupEnum ageGroup;
-    private boolean isBorrowed;
+    private boolean borrowed;
     private String authorName;
+    private  String currentOwnerName;
 
     public static BooksResponse fromEntity(BooksEntity entity) {
         return BooksResponse.builder()
@@ -27,8 +28,9 @@ public class BooksResponse {
                 .description(entity.getDescription())
                 .isbn(entity.getIsbn())
                 .ageGroup(entity.getAgeGroup())
-                .isBorrowed(entity.isBorrowed())
+                .borrowed(entity.isBorrowed())
                 .authorName(entity.getAuthor().getName())
+                .currentOwnerName(entity.getCurrentOwner() == null ? null : entity.getCurrentOwner().getName())
                 .build();
     }
 }
