@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "customers")
@@ -25,4 +26,7 @@ public class CustomersEntity {
 
     @Column(nullable = false, name = "birth_date")
     private LocalDate birthDate;
+
+    @OneToMany(mappedBy = "currentOwner")
+    private List<BooksEntity> booksBorrowed;
 }
