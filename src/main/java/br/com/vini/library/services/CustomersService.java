@@ -7,6 +7,8 @@ import br.com.vini.library.dtos.responses.CustomersResponse;
 import br.com.vini.library.exceptions.BadRequestException;
 import br.com.vini.library.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,16 +19,14 @@ import java.util.stream.Collectors;
 public class CustomersService {
     private final ICustomersRepository customersRepository;
 
-    public List<CustomersResponse> getAll() {
-        List<CustomersEntity> customers = customersRepository.findAll();
+    public Page<CustomersResponse> getAll(Pageable pageable) {
+        Page<CustomersEntity> customers = customersRepository.findAll(pageable);
 
         if (customers.isEmpty()) {
             throw new NotFoundException("There are no customers on the system");
         }
 
-        return customers.stream()
-                .map(CustomersResponse::fromEntity)
-                .collect(Collectors.toList());
+        return customers.map(CustomersResponse::fromEntity);
     }
 
     public CustomersResponse getById(Integer id) {

@@ -5,6 +5,8 @@ import br.com.vini.library.dtos.responses.CustomersResponse;
 import br.com.vini.library.services.CustomersService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +20,8 @@ public class CustomersController {
     private final CustomersService customersService;
 
     @GetMapping
-    public ResponseEntity<List<CustomersResponse>> getAll() {
-        return ResponseEntity.ok(customersService.getAll());
+    public ResponseEntity<Page<CustomersResponse>> getAll(Pageable pageable) {
+        return ResponseEntity.ok(customersService.getAll(pageable));
     }
 
     @GetMapping("/{id}")

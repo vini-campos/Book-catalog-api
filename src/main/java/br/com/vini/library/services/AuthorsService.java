@@ -7,6 +7,8 @@ import br.com.vini.library.dtos.responses.AuthorsResponse;
 import br.com.vini.library.exceptions.BadRequestException;
 import br.com.vini.library.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,16 +19,14 @@ import java.util.stream.Collectors;
 public class AuthorsService {
     private final IAuthorsRepository authorsRepository;
 
-    public List<AuthorsResponse> getAll() throws NotFoundException {
-        List<AuthorsEntity> authors = authorsRepository.findAll();
+    public Page<AuthorsResponse> getAll(Pageable pageable) throws NotFoundException {
+        Page<AuthorsEntity> authors = authorsRepository.findAll(pageable);
 
         if (authors.isEmpty()) {
             throw new NotFoundException("There are no authors on the system");
         }
 
-        return authors.stream()
-                .map(AuthorsResponse::fromEntity)
-                .collect(Collectors.toList());
+        return authors.map(AuthorsResponse::fromEntity);
     }
 
     public AuthorsResponse getById(Integer id) throws NotFoundException {

@@ -5,6 +5,8 @@ import br.com.vini.library.dtos.responses.AuthorsResponse;
 import br.com.vini.library.services.AuthorsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -20,8 +22,8 @@ public class AuthorsController {
     private final AuthorsService authorsService;
 
     @GetMapping
-    public ResponseEntity<List<AuthorsResponse>> getAll() {
-        return ResponseEntity.ok(authorsService.getAll());
+    public ResponseEntity<Page<AuthorsResponse>> getAll(Pageable pageable) {
+        return ResponseEntity.ok(authorsService.getAll(pageable));
     }
 
     @GetMapping("/{id}")

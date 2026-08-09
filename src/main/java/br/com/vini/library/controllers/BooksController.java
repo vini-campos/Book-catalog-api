@@ -5,6 +5,8 @@ import br.com.vini.library.dtos.responses.BooksResponse;
 import br.com.vini.library.services.BooksService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -20,8 +22,8 @@ public class BooksController {
     private final BooksService booksService;
 
     @GetMapping
-    public ResponseEntity<List<BooksResponse>> getAll() {
-        return ResponseEntity.ok(booksService.getAll());
+    public ResponseEntity<Page<BooksResponse>> getAll(Pageable pageable) {
+        return ResponseEntity.ok(booksService.getAll(pageable));
     }
 
     @GetMapping("/{id}")

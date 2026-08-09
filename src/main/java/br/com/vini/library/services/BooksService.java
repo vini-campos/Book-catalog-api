@@ -11,6 +11,8 @@ import br.com.vini.library.dtos.responses.BooksResponse;
 import br.com.vini.library.exceptions.BadRequestException;
 import br.com.vini.library.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,16 +25,14 @@ public class BooksService {
     private final IAuthorsRepository authorsRepository;
     private final ICustomersRepository customersRepository;
 
-    public List<BooksResponse> getAll() throws NotFoundException {
-        List<BooksEntity> books = booksRepository.findAll();
+    public Page<BooksResponse> getAll(Pageable pageable) throws NotFoundException {
+        Page<BooksEntity> books = booksRepository.findAll(pageable);
 
         if (books.isEmpty()) {
             throw new NotFoundException("There are no books on the system");
         }
 
-        return books.stream()
-                .map(BooksResponse::fromEntity)
-                .collect(Collectors.toList());
+        return books.map(BooksResponse::fromEntity);
     }
 
     public BooksResponse getById(Integer id) throws NotFoundException {
