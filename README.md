@@ -4,6 +4,13 @@ API REST para gerenciamento de uma biblioteca, permitindo cadastrar livros, auto
 
 ---
 
+## Deploy
+
+- **API:** https://book-catalog-api-f9ar.onrender.com
+- **Documentação:** https://book-catalog-api-f9ar.onrender.com/swagger-ui/index.html
+
+---
+
 ## Tecnologias
 
 - Java 21
