@@ -2,7 +2,7 @@ package br.com.vini.library.services;
 
 import br.com.vini.library.database.models.CustomersEntity;
 import br.com.vini.library.database.repositories.ICustomersRepository;
-import br.com.vini.library.dtos.requests.CustomersDto;
+import br.com.vini.library.dtos.requests.CustomersRequestDto;
 import br.com.vini.library.dtos.responses.CustomersResponse;
 import br.com.vini.library.exceptions.BadRequestException;
 import br.com.vini.library.exceptions.NotFoundException;
@@ -10,9 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +33,7 @@ public class CustomersService {
         return CustomersResponse.fromEntity(customer);
     }
 
-    public void registerCustomer(CustomersDto dto) throws BadRequestException {
+    public void registerCustomer(CustomersRequestDto dto) throws BadRequestException {
         if (customersRepository.existsByEmail(dto.getEmail())) {
             throw new BadRequestException("A customer with this email already exists");
         }
@@ -50,7 +47,7 @@ public class CustomersService {
         customersRepository.save(customer);
     }
 
-    public CustomersResponse update(Integer id, CustomersDto dto) {
+    public CustomersResponse update(Integer id, CustomersRequestDto dto) {
         CustomersEntity customer = customersRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Customer not found"));
 
