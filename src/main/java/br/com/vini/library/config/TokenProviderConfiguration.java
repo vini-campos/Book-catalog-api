@@ -23,10 +23,10 @@ public class TokenProviderConfiguration {
     // generate the token
     public String generateToken(Authentication authentication) {
         UserDetails user = (UserDetails) authentication.getPrincipal();
-        return buildToken(user.getUsername());
+        return generateToken(user.getUsername());
     }
 
-    private String buildToken(String username) {
+    private String generateToken(String username) {
         Date now = new Date();
         Date expiration = new Date(now.getTime() + expirationTime);
 
@@ -62,7 +62,7 @@ public class TokenProviderConfiguration {
     }
 
     // extract token information
-    private String getUsername(String token) {
+    public String getUsername(String token) {
         return getClaims(token).getSubject();
     }
 }
