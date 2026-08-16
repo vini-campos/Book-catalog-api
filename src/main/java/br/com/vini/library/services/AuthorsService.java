@@ -2,7 +2,7 @@ package br.com.vini.library.services;
 
 import br.com.vini.library.database.models.AuthorsEntity;
 import br.com.vini.library.database.repositories.IAuthorsRepository;
-import br.com.vini.library.dtos.requests.AuthorsDto;
+import br.com.vini.library.dtos.requests.AuthorsRequestDto;
 import br.com.vini.library.dtos.responses.AuthorsResponse;
 import br.com.vini.library.exceptions.BadRequestException;
 import br.com.vini.library.exceptions.NotFoundException;
@@ -10,9 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +33,7 @@ public class AuthorsService {
         return AuthorsResponse.fromEntity(author);
     }
 
-    public void registerAuthor(AuthorsDto dto) throws BadRequestException {
+    public void registerAuthor(AuthorsRequestDto dto) throws BadRequestException {
         if (authorsRepository.existsByName(dto.getName())) {
             throw new BadRequestException("An author with this name already exists");
         }
@@ -49,7 +46,7 @@ public class AuthorsService {
         authorsRepository.save(author);
     }
 
-    public AuthorsResponse update(Integer id, AuthorsDto dto) throws NotFoundException {
+    public AuthorsResponse update(Integer id, AuthorsRequestDto dto) throws NotFoundException {
         AuthorsEntity author = authorsRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("author not found to update"));
 

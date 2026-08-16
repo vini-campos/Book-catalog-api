@@ -1,6 +1,6 @@
 package br.com.vini.library.controllers;
 
-import br.com.vini.library.dtos.requests.CustomersDto;
+import br.com.vini.library.dtos.requests.CustomersRequestDto;
 import br.com.vini.library.dtos.responses.CustomersResponse;
 import br.com.vini.library.services.CustomersService;
 import jakarta.validation.Valid;
@@ -10,8 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,12 +29,12 @@ public class CustomersController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerCustomer(@Valid @RequestBody CustomersDto customersDto) {
+    public void registerCustomer(@Valid @RequestBody CustomersRequestDto customersDto) {
         customersService.registerCustomer(customersDto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CustomersResponse> updateCustomer(@PathVariable Integer id, @Valid @RequestBody CustomersDto customersDto) {
+    public ResponseEntity<CustomersResponse> updateCustomer(@PathVariable Integer id, @Valid @RequestBody CustomersRequestDto customersDto) {
         return ResponseEntity.ok(customersService.update(id, customersDto));
     }
 

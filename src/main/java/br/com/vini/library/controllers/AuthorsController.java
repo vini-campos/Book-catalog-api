@@ -1,6 +1,6 @@
 package br.com.vini.library.controllers;
 
-import br.com.vini.library.dtos.requests.AuthorsDto;
+import br.com.vini.library.dtos.requests.AuthorsRequestDto;
 import br.com.vini.library.dtos.responses.AuthorsResponse;
 import br.com.vini.library.services.AuthorsService;
 import jakarta.validation.Valid;
@@ -11,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,12 +31,12 @@ public class AuthorsController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerAuthor(@Valid @RequestBody AuthorsDto authorsDto) {
+    public void registerAuthor(@Valid @RequestBody AuthorsRequestDto authorsDto) {
         authorsService.registerAuthor(authorsDto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AuthorsResponse> updateAuthor(@Valid @PathVariable("id") Integer id, @RequestBody  AuthorsDto authorsDto) {
+    public ResponseEntity<AuthorsResponse> updateAuthor(@Valid @PathVariable("id") Integer id, @RequestBody AuthorsRequestDto authorsDto) {
         return ResponseEntity.ok(authorsService.update(id, authorsDto));
     }
 
