@@ -1,10 +1,9 @@
 package br.com.vini.library.dtos.requests;
 
+import br.com.vini.library.enums.AgeGroupEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-
-import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -12,13 +11,22 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @ToString
 @Builder
-public class CustomersDto {
+public class BooksRequestDto {
     @NotBlank
     private String name;
 
     @NotBlank
-    private String email;
+    private String description;
+
+    @NotBlank
+    private String isbn;
 
     @NotNull
-    private LocalDate birthDate;
+    private AgeGroupEnum ageGroup;
+
+    @NotNull
+    private Boolean isBorrowed;
+
+    @NotNull
+    private Integer authorId;
 }

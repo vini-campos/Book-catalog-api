@@ -1,7 +1,10 @@
 package br.com.vini.library.dtos.requests;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
+
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -9,10 +12,13 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 @Builder
-public class AuthorsDto {
+public class CustomersRequestDto {
     @NotBlank
     private String name;
 
     @NotBlank
-    private String biography;
+    private String email;
+
+    @NotNull
+    private LocalDate birthDate;
 }
