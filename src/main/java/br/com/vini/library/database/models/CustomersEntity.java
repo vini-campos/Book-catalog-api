@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "customers")
@@ -43,7 +42,7 @@ public class CustomersEntity implements UserDetails {
             joinColumns = @JoinColumn(name = "customer_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Set<RolesEntity> roles = new HashSet<>();
+    private Collection<RolesEntity> roles = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
