@@ -38,9 +38,9 @@ public class AuthenticationService {
             throw new BadRequestException("A customer with this  email already exists");
         }
 
-        RolesEntity role = rolesRepository.findByName(RoleTypeEnum.ROLE_ALUNO.name())
+        RolesEntity role = rolesRepository.findByName(RoleTypeEnum.ROLE_CUSTOMER.name())
                 .orElseGet(() -> rolesRepository.save(RolesEntity.builder()
-                        .name(RoleTypeEnum.ROLE_ALUNO.name())
+                        .name(RoleTypeEnum.ROLE_CUSTOMER.name())
                         .build()));
 
         CustomersEntity customer = CustomersEntity.builder()
