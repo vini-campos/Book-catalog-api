@@ -7,6 +7,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -20,6 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableMethodSecurity
 public class SecurityConfiguration {
     private final JwtAuthenticationFilterConfiguration jwtAuthenticationFilter;
 
@@ -32,9 +34,12 @@ public class SecurityConfiguration {
                         ex -> ex.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                                 .accessDeniedHandler(((request, response, accessDeniedException) -> {
                                     response.setStatus(HttpStatus.FORBIDDEN.value());
+                                    System.out.println("ACCESS DENIED HANDLER CHAMADO");
                                 })))
-                .authorizeHttpRequests(auth ->
-                    auth.requestMatchers(HttpMethod.POST, "/v1/auth/**").permitAll()
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.POST, "/v1/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/v1/books/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/v1/customers/**").hasRole("ADMIN")
                             .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
