@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,6 +23,7 @@ public class CustomersController {
         return ResponseEntity.ok(customersService.getAll(pageable));
     }
 
+    @PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')") // access denied exception
     @GetMapping("/{id}")
     public ResponseEntity<CustomersResponse> getById(@PathVariable Integer id) {
         return ResponseEntity.ok(customersService.getById(id));
