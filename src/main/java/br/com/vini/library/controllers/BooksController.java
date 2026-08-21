@@ -1,6 +1,6 @@
 package br.com.vini.library.controllers;
 
-import br.com.vini.library.dtos.requests.BooksDto;
+import br.com.vini.library.dtos.requests.BooksRequestDto;
 import br.com.vini.library.dtos.responses.BooksResponse;
 import br.com.vini.library.services.BooksService;
 import jakarta.validation.Valid;
@@ -11,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,12 +31,12 @@ public class BooksController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerBook(@Valid @RequestBody BooksDto booksDto) {
+    public void registerBook(@Valid @RequestBody BooksRequestDto booksDto) {
         booksService.registerBook(booksDto);
     }
 
     @PutMapping("/{isbn}")
-    public ResponseEntity<BooksResponse> updateBook(@Valid @PathVariable("isbn") String isbn, @RequestBody BooksDto booksDto) {
+    public ResponseEntity<BooksResponse> updateBook(@Valid @PathVariable("isbn") String isbn, @RequestBody BooksRequestDto booksDto) {
         return ResponseEntity.ok(booksService.update(isbn, booksDto));
     }
 

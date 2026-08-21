@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @ToString
 @Builder
-public class CustomersDto {
+public class RegisterRequestDto {
     @NotBlank
     private String name;
 
@@ -21,4 +21,7 @@ public class CustomersDto {
 
     @NotNull
     private LocalDate birthDate;
+
+    @NotBlank
+    private String password;
 }

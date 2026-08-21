@@ -6,7 +6,7 @@ import br.com.vini.library.database.models.CustomersEntity;
 import br.com.vini.library.database.repositories.IAuthorsRepository;
 import br.com.vini.library.database.repositories.IBooksRepository;
 import br.com.vini.library.database.repositories.ICustomersRepository;
-import br.com.vini.library.dtos.requests.BooksDto;
+import br.com.vini.library.dtos.requests.BooksRequestDto;
 import br.com.vini.library.dtos.responses.BooksResponse;
 import br.com.vini.library.exceptions.BadRequestException;
 import br.com.vini.library.exceptions.NotFoundException;
@@ -14,9 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -42,7 +39,7 @@ public class BooksService {
         return BooksResponse.fromEntity(book);
     }
 
-    public void registerBook(BooksDto dto) throws BadRequestException {
+    public void registerBook(BooksRequestDto dto) throws BadRequestException {
         if (booksRepository.existsByIsbn(dto.getIsbn())) {
             throw new BadRequestException("A book with this ISBN already exists");
         }
@@ -62,7 +59,7 @@ public class BooksService {
         booksRepository.save(book);
     }
 
-    public BooksResponse update(String isbn, BooksDto dto) throws NotFoundException {
+    public BooksResponse update(String isbn, BooksRequestDto dto) throws NotFoundException {
         BooksEntity book = booksRepository.findByIsbn(isbn)
                 .orElseThrow(() -> new NotFoundException("Book not found to update"));
 

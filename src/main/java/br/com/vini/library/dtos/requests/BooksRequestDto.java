@@ -11,7 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 @Builder
-public class BooksDto {
+public class BooksRequestDto {
     @NotBlank
     private String name;
 
