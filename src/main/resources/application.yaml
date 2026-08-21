@@ -14,7 +14,8 @@ spring:
       ddl-auto: update
     show-sql: true
     properties:
-      format_sql: true
+      hibernate:
+        format_sql: true
 
 jwt:
   expiration: ${JWT_EXPIRATION:900000} #15 minutes
