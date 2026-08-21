@@ -74,6 +74,9 @@ Crie um arquivo `.env` na raiz do projeto (ou configure o `application.yaml`):
 DB_URL=jdbc:mysql://localhost:3306/library
 DB_USERNAME=seu_usuario
 DB_PASSWORD=sua_senha
+
+JWT_EXPIRATION=900000
+JWT_KEY=execute: {openssl rand -hex 64} no seu git bash
 ```
 
 ### 4. Rode a aplicação
