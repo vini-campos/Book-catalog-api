@@ -34,12 +34,12 @@ public class SecurityConfiguration {
                         ex -> ex.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                                 .accessDeniedHandler(((request, response, accessDeniedException) -> {
                                     response.setStatus(HttpStatus.FORBIDDEN.value());
-                                    System.out.println("ACCESS DENIED HANDLER CHAMADO");
                                 })))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/v1/auth/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/v1/books/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/v1/customers/**").hasRole("ADMIN")
+                        .requestMatchers("/swagger-ui/index.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                             .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
